@@ -70,6 +70,7 @@ class SQLighter:
         return None if (len(lessons) == 0) else lessons[0]
 
     def first_lesson_of_day(self, day):
+        """ Возвращает первую пару дня с учетом четности недели """
         parity = week_parity_day(day)
 
         query = ('SELECT subject, teacher, classroom, time_begin, time_end, number FROM Schedule sch '
@@ -83,12 +84,16 @@ class SQLighter:
         return None if (len(lessons) == 0) else lessons[0]
 
     def subject_name(self, id):
+        """ Возвращает название предмета по его id """
         query = 'SELECT name FROM Subjects WHERE id = ' + str(id)
-        return self.execute(query)[0][0]
+        subjects = self.execute(query)
+        return '' if (len(subjects) == 0) else subjects[0][0]
 
     def teacher_full_name(self, id):
+        """ Возвращает ФИО препода по id """
         query = 'SELECT surname, name, patronymic FROM Teachers WHERE id = ' + str(id)
-        return ' '.join(self.execute(query)[0])
+        teachers = self.execute(query)
+        return '' if (len(teachers) == 0) else ' '.join(teachers[0])
 
     def execute(self, request):
         """ Выполняет запрос к базе данных """
