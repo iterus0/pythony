@@ -63,7 +63,7 @@ def format_lesson_end(lesson):
 def format_lesson_start(lesson):
     db = SQLighter(db_path)
 
-    start_hour, start_minute = [int(n) for n in lesson[4].split(':')]
+    start_hour, start_minute = [int(n) for n in lesson[3].split(':')]
     l_left = remaining_time(start_hour, start_minute)
 
     response = format_lesson(lesson)
