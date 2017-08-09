@@ -9,8 +9,10 @@ CREATE TABLE "Teachers" (
 CREATE TABLE "Subjects" (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
 	`name`	TEXT NOT NULL,
+	`group`	INTEGER NOT NULL,
 	`classroom`	INTEGER NOT NULL,
 	`teacher`	INTEGER NOT NULL,
+	FOREIGN KEY(`group`) REFERENCES 'Chats'('group'),
 	FOREIGN KEY(`teacher`) REFERENCES `Teachers`(`id`)
 );
 CREATE TABLE "Schedule" (
@@ -22,5 +24,10 @@ CREATE TABLE "Schedule" (
 	`time_begin`	TEXT NOT NULL,
 	`time_end`	TEXT NOT NULL,
 	FOREIGN KEY(`subject`) REFERENCES `Subjects`(`id`)
+);
+CREATE TABLE `Chats` (
+	`id`	INTEGER NOT NULL UNIQUE,
+	`group`	INTEGER NOT NULL,
+	PRIMARY KEY(id)
 );
 COMMIT;

@@ -1,14 +1,15 @@
 from app import bot
 from .sqlighter import SQLighter
-from . import lesson_format
+from . import lesson_format, week_info
 
 
 @bot.message_handler(commands=["rasp"])
 def get_current_lesson(message):
+    chat_id = message.chat.id
     db = SQLighter()
 
     msg = ""
-    lesson = db.current_lesson()
+    lesson = db.current_lesson(chat_id)
 
     if lesson is not None:
         msg += lesson_format.format_lesson_end_left(lesson)
@@ -17,15 +18,16 @@ def get_current_lesson(message):
         msg += 'Сейчас пары нет'
 
     db.close()
-    bot.send_message(message.chat.id, msg)
+    bot.send_message(chat_id, msg)
 
 
 @bot.message_handler(commands=["next"])
 def get_next_lesson(message):
+    chat_id = message.chat.id
     db = SQLighter()
 
     msg = ""
-    lesson = db.next_lesson()
+    lesson = db.next_lesson(chat_id)
 
     if lesson is not None:
         msg += "Следующая пара сегодня:\n"
@@ -36,14 +38,14 @@ def get_next_lesson(message):
         msg += "Следующая пара "
 
         # ищем следующую первую пару
-        day = lesson_format.week_day()
+        day = week_info.week_day()
         for offset in range(7):
             day = (day + 1) % 7
-            lesson = db.first_lesson_of_day(day)
+            lesson = db.first_lesson_of_day(chat_id, day)
             if lesson is not None:
-                msg += "(" + lesson_format.day_name(day) + "):\n"
+                msg += "(" + week_info.day_name(day) + "):\n"
                 msg += lesson_format.format_lesson(lesson)
                 break
 
     db.close()
-    bot.send_message(message.chat.id, msg)
+    bot.send_message(chat_id, msg)
