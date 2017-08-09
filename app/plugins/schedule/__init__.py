@@ -78,16 +78,13 @@ def get_current_lesson(message):
     db = SQLighter(db_path)
 
     msg = ""
-    lessons = db.current_lesson()
+    lesson = db.current_lesson()
 
-    if len(lessons) == 0:
-        msg += 'Сейчас пары нет'
-
-    elif len(lessons) == 1:
-        msg += format_lesson_end(lessons[0])
+    if lesson is not None:
+        msg += format_lesson_end(lesson)
 
     else:
-        msg += '[!] Произошла ошибка'
+        msg += 'Сейчас пары нет'
 
     db.close()
     bot.send_message(message.chat.id, msg)
@@ -98,11 +95,11 @@ def get_next_lesson(message):
     db = SQLighter(db_path)
 
     msg = ""
-    lessons = db.next_lesson()
+    lesson = db.next_lesson()
 
-    if len(lessons) == 1:
+    if lesson is not None:
         msg += "Следующая пара сегодня:\n"
-        msg += format_lesson_start(lessons[0])
+        msg += format_lesson_start(lesson)
 
     else:
         msg += "Сегодня больше нет пар.\n"
@@ -112,10 +109,10 @@ def get_next_lesson(message):
         day = week_day()
         for offset in range(7):
             day = (day + 1) % 7
-            lessons = db.first_lesson_of_day(day)
-            if len(lessons) == 1:
+            lesson = db.first_lesson_of_day(day)
+            if lesson is not None:
                 msg += "(" + day_name(day) + "):\n"
-                msg += format_lesson(lessons[0])
+                msg += format_lesson(lesson)
                 break
 
     db.close()

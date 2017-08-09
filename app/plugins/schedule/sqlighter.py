@@ -47,9 +47,11 @@ class SQLighter:
                  'WHERE time_begin <= "' + str_current_time + '" AND '
                  'time_end BETWEEN "' + str_current_time + '" AND "' + str_finish_time + '" AND '
                  'week_day = ' + str(week_day()) + ' AND '
-                 'week_parity IN (' + str(week_parity()) + ', -1)')
+                 'week_parity IN (' + str(week_parity()) + ', -1) '
+                 'ORDER BY number')
 
-        return self.execute(query)
+        lessons = self.execute(query)
+        return None if (len(lessons) == 0) else lessons[0]
 
     def next_lesson(self):
         """ Возвращает следующую пару текущего дня """
@@ -65,7 +67,7 @@ class SQLighter:
                  'ORDER BY number')
 
         lessons = self.execute(query)
-        return [] if (len(lessons) == 0) else lessons
+        return None if (len(lessons) == 0) else lessons[0]
 
     def first_lesson_of_day(self, day):
         parity = week_parity_day(day)
@@ -78,7 +80,7 @@ class SQLighter:
                  'ORDER BY number')
 
         lessons = self.execute(query)
-        return [] if (len(lessons) == 0) else lessons
+        return None if (len(lessons) == 0) else lessons[0]
 
     def subject_name(self, id):
         query = 'SELECT name FROM Subjects WHERE id = ' + str(id)
