@@ -1,5 +1,5 @@
 from .sqlighter import SQLighter
-from . import week_info
+from . import time_utils
 
 
 def format_lesson(lesson):
@@ -36,7 +36,7 @@ def format_lesson_starting(lesson):
     lesson_begin = lesson[2]
     start_hour, start_minute = [int(n) for n in lesson_begin.split(':')]
 
-    l_left = week_info.remaining_time(start_hour, start_minute)
+    l_left = time_utils.remaining_time(start_hour, start_minute)
 
     reply = format_lesson(lesson)
     reply += '\nДо начала пары осталось {}'.format(l_left)
@@ -51,7 +51,7 @@ def format_lesson_ending(lesson):
     lesson_end = lesson[3]
     finish_hour, finish_minute = [int(n) for n in lesson_end.split(':')]
 
-    l_left = week_info.remaining_time(finish_hour, finish_minute)
+    l_left = time_utils.remaining_time(finish_hour, finish_minute)
 
     reply = format_lesson(lesson)
     reply += '\nДо конца пары осталось {}'.format(l_left)

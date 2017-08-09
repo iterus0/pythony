@@ -2,7 +2,7 @@ import datetime
 import sqlite3
 import os
 
-from . import sql_queries, week_info
+from . import sql_queries, time_utils
 
 dir_path = os.path.dirname(os.path.abspath(__file__))
 db_name = 'schedule.db'
@@ -20,12 +20,12 @@ class SQLighter:
         """ Возвращает текущую пару """
 
         dt_current_time = datetime.datetime.now()
-        dt_finish_time = dt_current_time + week_info.lesson_length
+        dt_finish_time = dt_current_time + time_utils.lesson_length
 
-        current_time = dt_current_time.strftime(week_info.time_format)
-        finish_time = dt_finish_time.strftime(week_info.time_format)
-        day = week_info.week_day()
-        parity = week_info.week_parity()
+        current_time = dt_current_time.strftime(time_utils.time_format)
+        finish_time = dt_finish_time.strftime(time_utils.time_format)
+        day = time_utils.week_day()
+        parity = time_utils.week_parity()
 
         query = sql_queries.current_lesson.format(chat_id=chat_id,
                                                   current_time=current_time,
@@ -39,9 +39,9 @@ class SQLighter:
     def next_lesson(self, chat_id):
         """ Возвращает следующую пару текущего дня """
 
-        current_time = datetime.datetime.now().strftime(week_info.time_format)
-        day = week_info.week_day()
-        parity = week_info.week_parity()
+        current_time = datetime.datetime.now().strftime(time_utils.time_format)
+        day = time_utils.week_day()
+        parity = time_utils.week_parity()
 
         query = sql_queries.next_lesson.format(chat_id=chat_id,
                                                current_time=current_time,
@@ -54,7 +54,7 @@ class SQLighter:
     def first_lesson_of_day(self, chat_id, day):
         """ Возвращает первую пару дня с учетом четности недели """
 
-        parity = week_info.week_parity_day(day)
+        parity = time_utils.week_parity_day(day)
 
         query = sql_queries.day_lessons.format(chat_id=chat_id,
                                                day=day,
