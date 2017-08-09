@@ -30,7 +30,7 @@ def format_lesson(lesson):
                                        end=l_end)
 
 
-def format_lesson_start_left(lesson):
+def format_lesson_starting(lesson):
     db = SQLighter()
 
     lesson_begin = lesson[2]
@@ -45,7 +45,7 @@ def format_lesson_start_left(lesson):
     return reply
 
 
-def format_lesson_end_left(lesson):
+def format_lesson_ending(lesson):
     db = SQLighter()
 
     lesson_end = lesson[3]

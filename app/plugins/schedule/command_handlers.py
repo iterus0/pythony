@@ -12,7 +12,7 @@ def get_current_lesson(message):
     lesson = db.current_lesson(chat_id)
 
     if lesson is not None:
-        msg += lesson_format.format_lesson_end_left(lesson)
+        msg += lesson_format.format_lesson_ending(lesson)
 
     else:
         msg += 'Сейчас пары нет'
@@ -31,7 +31,7 @@ def get_next_lesson(message):
 
     if lesson is not None:
         msg += "Следующая пара сегодня:\n"
-        msg += lesson_format.format_lesson_start_left(lesson)
+        msg += lesson_format.format_lesson_starting(lesson)
 
     else:
         msg += "Сегодня больше нет пар.\n"
