@@ -1,0 +1,26 @@
+BEGIN TRANSACTION;
+CREATE TABLE "Teachers" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`surname`	TEXT,
+	`name`	TEXT,
+	`patronymic`	TEXT,
+	`phone`	TEXT
+);
+CREATE TABLE "Subjects" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`name`	TEXT,
+	`week_parity`	INTEGER
+);
+CREATE TABLE "Schedule" (
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`number`	INTEGER NOT NULL,
+	`week_day`	INTEGER NOT NULL,
+	`teacher`	INTEGER NOT NULL,
+	`subject`	INTEGER NOT NULL,
+	`classroom`	INTEGER NOT NULL,
+	`time_begin`	TEXT NOT NULL,
+	`time_end`	TEXT NOT NULL,
+	FOREIGN KEY(`teacher`) REFERENCES `Teachers`(`id`),
+	FOREIGN KEY(`subject`) REFERENCES 'Subjects'('id')
+);
+COMMIT;
