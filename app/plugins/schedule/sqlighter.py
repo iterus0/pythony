@@ -17,6 +17,14 @@ def week_day():
     return current_time.weekday()
 
 
+def week_parity_day(day):
+    current_day = week_day()
+    current_parity = week_parity()
+    next_parity = (current_parity + 1) % 2
+
+    return current_parity if (day >= current_day) else next_parity
+
+
 class SQLighter:
     """ Простая обертка над сырыми SQL запросами """
 
@@ -46,24 +54,31 @@ class SQLighter:
     def next_lesson(self):
         """ Возвращает следующую пару текущего дня """
 
-        lessons = self.current_lesson()
+        str_current_time = datetime.datetime.now().strftime(time_format)
 
-        if len(lessons) == 1:
-            lesson = lessons[0]
-            lesson_number = lesson[5]
-            next_lesson_number = lesson_number + 1
+        query = ('SELECT subject, teacher, classroom, time_begin, time_end, number FROM Schedule sch '
+                 'LEFT JOIN Subjects subj ON subj.id = sch.subject '
+                 'LEFT JOIN Teachers t ON t.id = sch.teacher '
+                 'WHERE time_begin > "' + str_current_time + '" AND '
+                 'week_day = ' + str(week_day()) + ' AND '
+                 'week_parity IN (' + str(week_parity()) + ', -1) '
+                 'ORDER BY number')
 
-            query = ('SELECT subject, teacher, classroom, time_begin, time_end, number FROM Schedule sch '
-                     'LEFT JOIN Subjects subj ON subj.id = sch.subject '
-                     'LEFT JOIN Teachers t ON t.id = sch.teacher '
-                     'WHERE number = ' + str(next_lesson_number) + ' AND '
-                     'week_day = ' + str(week_day()) + ' AND '
-                     'week_parity IN (' + str(week_parity()) + ', -1)')
+        lessons = self.execute(query)
+        return [] if (len(lessons) == 0) else lessons
 
-            return self.execute(query)
+    def first_lesson_of_day(self, day):
+        parity = week_parity_day(day)
 
-        else:
-            return []
+        query = ('SELECT subject, teacher, classroom, time_begin, time_end, number FROM Schedule sch '
+                 'LEFT JOIN Subjects subj ON subj.id = sch.subject '
+                 'LEFT JOIN Teachers t ON t.id = sch.teacher '
+                 'WHERE week_day = ' + str(day) + ' AND '
+                 'week_parity IN (' + str(parity) + ', -1) '
+                 'ORDER BY number')
+
+        lessons = self.execute(query)
+        return [] if (len(lessons) == 0) else lessons
 
     def subject_name(self, id):
         query = 'SELECT name FROM Subjects WHERE id = ' + str(id)
