@@ -60,12 +60,12 @@ class SQLighter:
         lessons = self.execute(query)
         return None if (len(lessons) == 0) else lessons[0]
 
-    def subject_name(self, id):
+    def subject_info(self, id):
         """ Возвращает название предмета по его id """
-        query = sql_queries.subject_name_by_id.format(id=id)
+        query = sql_queries.subject_info.format(id=id)
 
         subjects = self.execute(query)
-        return '' if (len(subjects) == 0) else subjects[0][0]
+        return None if (len(subjects) == 0) else subjects[0]
 
     def teacher_full_name(self, id):
         """ Возвращает ФИО препода по id """
