@@ -63,7 +63,18 @@ def get_current_lesson(message):
 @bot.message_handler(commands=["next"])
 def get_next_lesson(message):
     db = SQLighter(db_path)
-    msg = "Следующая пара"
+
+    msg = ""
+    lessons = db.next_lesson()
+
+    if len(lessons) == 1:
+        msg += "Следующая пара сегодня:\n"
+        msg += format_lesson(lessons[0])
+
+    else:
+        msg += "Сегодня больше нет пар.\n"
+        msg += "Следующая пара:\n"
+
     db.close()
     bot.send_message(message.chat.id, msg)
 
