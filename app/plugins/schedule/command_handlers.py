@@ -18,7 +18,7 @@ def get_current_lesson(message):
         msg += 'Сейчас пары нет'
 
     db.close()
-    bot.send_message(chat_id, msg)
+    bot.send_message(chat_id, msg, parse_mode="Markdown")
 
 
 @bot.message_handler(commands=["next"])
@@ -43,9 +43,9 @@ def get_next_lesson(message):
             day = (day + 1) % 7
             lesson = db.first_lesson_of_day(chat_id, day)
             if lesson is not None:
-                msg += "(" + time_utils.day_name(day) + "):\n"
+                msg += "(*{}*):\n".format(time_utils.day_name(day))
                 msg += lesson_format.format_lesson(lesson)
                 break
 
     db.close()
-    bot.send_message(chat_id, msg)
+    bot.send_message(chat_id, msg, parse_mode="Markdown")

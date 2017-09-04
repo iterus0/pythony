@@ -19,15 +19,15 @@ def format_lesson(lesson):
     l_teacher = db.teacher_full_name(teacher_id)
 
     db.close()
-    return ('Предмет: {name}\n'
-            'Аудитория: {aud}\n'
-            'Препод: {teacher}\n'
-            'Начало: {begin}\n'
-            'Окончание: {end}').format(name=l_name,
-                                       aud=l_aud,
-                                       teacher=l_teacher,
-                                       begin=l_begin,
-                                       end=l_end)
+    return ('*Предмет:* {name}\n'
+            '*Аудитория:* {aud}\n'
+            '*Препод:* {teacher}\n'
+            '*Начало:* {begin}\n'
+            '*Окончание:* {end}').format(name=l_name,
+                                         aud=l_aud,
+                                         teacher=l_teacher,
+                                         begin=l_begin,
+                                         end=l_end)
 
 
 def format_lesson_starting(lesson):
@@ -39,7 +39,7 @@ def format_lesson_starting(lesson):
     l_left = time_utils.remaining_time(start_hour, start_minute)
 
     reply = format_lesson(lesson)
-    reply += '\nДо начала пары осталось {}'.format(l_left)
+    reply += '\nДо начала пары осталось *{}*'.format(l_left)
 
     db.close()
     return reply
@@ -54,7 +54,7 @@ def format_lesson_ending(lesson):
     l_left = time_utils.remaining_time(finish_hour, finish_minute)
 
     reply = format_lesson(lesson)
-    reply += '\nДо конца пары осталось {}'.format(l_left)
+    reply += '\nДо конца пары осталось *{}*'.format(l_left)
 
     db.close()
     return reply
