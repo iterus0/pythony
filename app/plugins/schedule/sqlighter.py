@@ -16,7 +16,7 @@ class SQLighter:
         self.connection = sqlite3.connect(db_path)
         self.cursor = self.connection.cursor()
 
-    def current_lesson(self, chat_id):
+    def current_lesson(self):
         """ Возвращает текущую пару """
 
         dt_current_time = datetime.datetime.now()
@@ -27,8 +27,7 @@ class SQLighter:
         day = time_utils.week_day()
         parity = time_utils.week_parity()
 
-        query = sql_queries.current_lesson.format(chat_id=chat_id,
-                                                  current_time=current_time,
+        query = sql_queries.current_lesson.format(current_time=current_time,
                                                   finish_time=finish_time,
                                                   day=day,
                                                   parity=parity)
@@ -36,28 +35,26 @@ class SQLighter:
         lessons = self.execute(query)
         return None if (len(lessons) == 0) else lessons[0]
 
-    def next_lesson(self, chat_id):
+    def next_lesson(self):
         """ Возвращает следующую пару текущего дня """
 
         current_time = datetime.datetime.now().strftime(time_utils.time_format)
         day = time_utils.week_day()
         parity = time_utils.week_parity()
 
-        query = sql_queries.next_lesson.format(chat_id=chat_id,
-                                               current_time=current_time,
+        query = sql_queries.next_lesson.format(current_time=current_time,
                                                day=day,
                                                parity=parity)
 
         lessons = self.execute(query)
         return None if (len(lessons) == 0) else lessons[0]
 
-    def first_lesson_of_day(self, chat_id, day):
+    def first_lesson_of_day(self, day):
         """ Возвращает первую пару дня с учетом четности недели """
 
         parity = time_utils.week_parity_day(day)
 
-        query = sql_queries.day_lessons.format(chat_id=chat_id,
-                                               day=day,
+        query = sql_queries.day_lessons.format(day=day,
                                                parity=parity)
 
         lessons = self.execute(query)

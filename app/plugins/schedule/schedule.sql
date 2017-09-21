@@ -25,9 +25,4 @@ CREATE TABLE "Schedule" (
 	`time_end`	TEXT NOT NULL,
 	FOREIGN KEY(`subject`) REFERENCES `Subjects`(`id`)
 );
-CREATE TABLE `Chats` (
-	`id`	INTEGER NOT NULL UNIQUE,
-	`group`	INTEGER NOT NULL,
-	PRIMARY KEY(id)
-);
 COMMIT;
